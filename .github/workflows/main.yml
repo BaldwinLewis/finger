@@ -1,0 +1,35 @@
+name: finger scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: install
+      run: |
+        git clone https://github.com/EASY233/Finger.git
+        cd Finger/
+        pip3 install -r requirements.txt
+
+        
+    - name: start
+      run: |
+        cd Finger/
+        python3 Finger.py -f ../targets.txt
+        zip -r ../result.zip ./output/
+        
+
+
+    - name: Upload the result file as an artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: result-file
+        path: |
+          targets.txt
+          result.zip
